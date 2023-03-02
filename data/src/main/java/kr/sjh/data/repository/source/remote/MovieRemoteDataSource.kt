@@ -1,36 +1,40 @@
 package kr.sjh.data.repository.source.remote
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import android.util.Log
+import androidx.paging.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kr.sjh.data.api.NaverMovieService
 import kr.sjh.data.db.NaverMovieDB
 import kr.sjh.data.model.MovieEntity
+import kr.sjh.data.paging.NaverMoviePagingSource
+import kr.sjh.domain.model.Movie
+import javax.inject.Inject
 
 interface MovieRemoteDataSource {
     fun getMovies(
         query: String,
         dispaly: Int,
-        start: String,
-    ): Flow<PagingData<MovieEntity>>
+        start: Int
+    ): Flow<PagingData<Movie>>
 }
 
-class MovieRemoteDataSourceImpl(
-    private val service: NaverMovieService,
-    private val db: NaverMovieDB
+class MovieRemoteDataSourceImpl @Inject constructor(
+    private val service: NaverMovieService
 ) :
     MovieRemoteDataSource {
-    private val movieDao = db.movieDao()
 
     override fun getMovies(
         query: String,
         dispaly: Int,
-        start: String,
-    ): Flow<PagingData<MovieEntity>> {
+        start: Int
+    ): Flow<PagingData<Movie>> {
+
         return Pager(
-            config = PagingConfig(dispaly),
-        )
+            PagingConfig(pageSize = dispaly)
+        ) {
+            NaverMoviePagingSource(service, query, dispaly, start)
+        }.flow
 
     }
 }

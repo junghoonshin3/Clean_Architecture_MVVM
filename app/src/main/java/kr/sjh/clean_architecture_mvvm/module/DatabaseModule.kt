@@ -1,11 +1,11 @@
 package kr.sjh.clean_architecture_mvvm.module
 
+import android.app.Application
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kr.sjh.clean_architecture_mvvm.AppApplication
 import kr.sjh.data.db.NaverMovieDB
 import kr.sjh.data.db.NaverMovieDao
 import kr.sjh.data.db.NaverMovieRemoteKeysDao
@@ -15,7 +15,7 @@ import kr.sjh.data.db.NaverMovieRemoteKeysDao
 object DatabaseModule {
 
     @Provides
-    fun provideDatabase(app: AppApplication): NaverMovieDB =
+    fun provideDatabase(app: Application): NaverMovieDB =
         Room.databaseBuilder(app, NaverMovieDB::class.java, "movie_db").fallbackToDestructiveMigration()
             .build()
 

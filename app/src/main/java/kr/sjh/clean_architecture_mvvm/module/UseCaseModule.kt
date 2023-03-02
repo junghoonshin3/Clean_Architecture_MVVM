@@ -5,14 +5,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import kr.sjh.domain.repository.NaverMovieRepository
-import kr.sjh.domain.usecase.MovieListUseCase
+import kr.sjh.domain.usecase.GetMoviesUseCase
 
 @Module
 @InstallIn(ViewModelComponent::class)
 object UseCaseModule {
 
     @Provides
-    fun providesGetGithubReposUseCase(repository: NaverMovieRepository): MovieListUseCase {
-        return MovieListUseCase(repository)
+    fun providesGetGithubReposUseCase(repository: NaverMovieRepository): GetMoviesUseCase {
+        return GetMoviesUseCase(repository)
     }
 }

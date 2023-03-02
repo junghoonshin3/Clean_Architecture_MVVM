@@ -15,6 +15,8 @@ import kr.sjh.data.repository.source.remote.MovieRemoteDataSourceImpl
 object RemoteDataModule {
 
     @Provides
-    fun provideRemoteDataSource(service: NaverMovieService,movieDB: NaverMovieDB): MovieRemoteDataSource =
-        MovieRemoteDataSourceImpl(service, movieDB)
+    fun provideRemoteDataSource(
+        service: NaverMovieService
+    ): MovieRemoteDataSource =
+        MovieRemoteDataSourceImpl(service)
 }
