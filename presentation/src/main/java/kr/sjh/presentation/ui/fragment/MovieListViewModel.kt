@@ -1,13 +1,19 @@
 package kr.sjh.presentation.ui.fragment
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.databinding.adapters.TextViewBindingAdapter.OnTextChanged
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kr.sjh.domain.model.Movie
 import kr.sjh.domain.usecase.GetMoviesUseCase
@@ -18,18 +24,15 @@ import javax.inject.Inject
 class MovieListViewModel @Inject constructor(private val getMoviesUseCase: GetMoviesUseCase) :
     BaseViewModel() {
 
+    val searchMovie = MutableStateFlow("")
 
-    var movieList: Flow<PagingData<Movie>>? = null
+    private val _movieList = MutableStateFlow<PagingData<Movie>?>(null)
+    val movieList = _movieList.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            getMovies("아", 20, 1)
+
+    suspend fun getMovies(searchName: String, display: Int, start: Int) {
+        getMoviesUseCase.invoke(searchName, display, start).cachedIn(viewModelScope).collect {
+            _movieList.value = it
         }
-    }
-
-    private suspend fun getMovies(searchName: String, display: Int, start: Int) {
-        movieList = getMoviesUseCase.invoke(searchName, display, start).cachedIn(viewModelScope)
-
-
     }
 }

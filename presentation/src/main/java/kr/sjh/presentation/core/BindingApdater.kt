@@ -1,6 +1,8 @@
 package kr.sjh.presentation.core
 
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import kr.sjh.presentation.R

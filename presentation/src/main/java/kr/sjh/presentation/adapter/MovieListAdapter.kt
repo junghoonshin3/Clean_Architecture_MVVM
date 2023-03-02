@@ -13,6 +13,7 @@ class MovieListAdapter(diffCallback: DiffUtil.ItemCallback<Movie>) :
 
 
     override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
+
         getItem(position)?.let {
             holder.bind(it)
         }
@@ -36,7 +37,7 @@ class MovieListViewHolder(val binding: RvMovieItemBinding) : ViewHolder(binding.
 object MovieListComparator : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         // Id is unique.
-        return oldItem.link == newItem.link
+        return oldItem.getCode(oldItem.link) == newItem.getCode(oldItem.link)
     }
 
     override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {

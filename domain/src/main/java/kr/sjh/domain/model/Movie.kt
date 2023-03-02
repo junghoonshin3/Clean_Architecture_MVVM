@@ -18,7 +18,6 @@ data class Movie(
         return link?.let {
             val uri = Uri.parse(link)
             var code = uri.getQueryParameter("code")
-            Log.i("sjh", "code!!!!! : $code")
             code
         }.toString()
     }

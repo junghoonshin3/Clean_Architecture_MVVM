@@ -15,7 +15,6 @@ class GetMoviesUseCase @Inject constructor(private val repository: NaverMovieRep
         display: Int,
         start: Int
     ): Flow<PagingData<Movie>> {
-
         return repository.searchMovies(query, display, start)
     }
 

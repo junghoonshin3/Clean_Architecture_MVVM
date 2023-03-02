@@ -29,11 +29,10 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         dispaly: Int,
         start: Int
     ): Flow<PagingData<Movie>> {
-
         return Pager(
             PagingConfig(pageSize = dispaly)
         ) {
-            NaverMoviePagingSource(service, query, dispaly, start)
+            NaverMoviePagingSource(service, query, dispaly)
         }.flow
 
     }
