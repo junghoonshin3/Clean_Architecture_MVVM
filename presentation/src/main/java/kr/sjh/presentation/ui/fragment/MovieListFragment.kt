@@ -21,7 +21,7 @@ import kr.sjh.presentation.viewmodel.MainViewModel
 @AndroidEntryPoint
 class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragment_movie_list) {
 
-    val viewModel: MovieListViewModel by lazy {
+    private val viewModel: MovieListViewModel by lazy {
         ViewModelProvider(this)[MovieListViewModel::class.java]
     }
 
@@ -30,10 +30,10 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragme
         val pagingAdapter = MovieListAdapter(MovieListComparator)
         with(binding.rvMovieList) {
             adapter = pagingAdapter
+
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.movieList.collectLatest {
                     it?.let {
-
                         pagingAdapter.submitData(it)
                     }
 

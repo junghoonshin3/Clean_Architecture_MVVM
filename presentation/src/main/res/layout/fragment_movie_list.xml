@@ -18,6 +18,8 @@
             android:id="@+id/et_search_movie"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="영화 검색"
+            app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -31,13 +33,16 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_movie_list"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:itemTopBottomOffsets="@{100}"
+            app:itemStartEndOffsets="@{20}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_search_movie"
+            app:spanCount="2"
             tools:listitem="@layout/rv_movie_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

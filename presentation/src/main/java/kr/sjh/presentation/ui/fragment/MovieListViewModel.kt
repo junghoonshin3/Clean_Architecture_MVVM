@@ -29,7 +29,6 @@ class MovieListViewModel @Inject constructor(private val getMoviesUseCase: GetMo
     private val _movieList = MutableStateFlow<PagingData<Movie>?>(null)
     val movieList = _movieList.asStateFlow()
 
-
     suspend fun getMovies(searchName: String, display: Int, start: Int) {
         getMoviesUseCase.invoke(searchName, display, start).cachedIn(viewModelScope).collect {
             _movieList.value = it

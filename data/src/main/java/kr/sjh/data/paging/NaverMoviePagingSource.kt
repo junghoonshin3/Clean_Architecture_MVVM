@@ -49,15 +49,10 @@ class NaverMoviePagingSource(
             }
 
         } catch (e: IOException) {
-            e.printStackTrace()
-            // IOException for network failures.
             return LoadResult.Error(e)
         } catch (e: HttpException) {
-            // HttpException for any non-2xx HTTP status codes.
-            e.printStackTrace()
             return LoadResult.Error(e)
         } catch (e: Exception) {
-            e.printStackTrace()
             return LoadResult.Error(e)
         }
     }
