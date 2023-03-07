@@ -12,8 +12,14 @@ class MovieListAdapter(diffCallback: DiffUtil.ItemCallback<Movie>) :
     PagingDataAdapter<Movie, MovieListViewHolder>(diffCallback) {
 
 
-    override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
+    private val LOADING_ITEM = 1
+    private val MOVIE_ITEM = 2
 
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount) MOVIE_ITEM else LOADING_ITEM
+    }
+
+    override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
         getItem(position)?.let {
             holder.bind(it)
         }
@@ -31,6 +37,7 @@ class MovieListAdapter(diffCallback: DiffUtil.ItemCallback<Movie>) :
 class MovieListViewHolder(val binding: RvMovieItemBinding) : ViewHolder(binding.root) {
     fun bind(item: Movie) {
         binding.movie = item
+
     }
 }
 

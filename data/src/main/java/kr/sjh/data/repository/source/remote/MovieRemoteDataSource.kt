@@ -1,12 +1,10 @@
 package kr.sjh.data.repository.source.remote
 
-import android.util.Log
-import androidx.paging.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kr.sjh.data.api.NaverMovieService
-import kr.sjh.data.db.NaverMovieDB
-import kr.sjh.data.model.MovieEntity
 import kr.sjh.data.paging.NaverMoviePagingSource
 import kr.sjh.domain.model.Movie
 import javax.inject.Inject

@@ -16,8 +16,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_search_movie"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:hint="영화 검색"
             app:errorEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +27,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:privateImeOptions="defaultInputmode=korean"
                 android:singleLine="true"
                 android:text="@={vm.searchMovie}" />
 
@@ -35,8 +37,8 @@
             android:id="@+id/rv_movie_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:itemTopBottomOffsets="@{100}"
             app:itemStartEndOffsets="@{20}"
+            app:itemTopBottomOffsets="@{100}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

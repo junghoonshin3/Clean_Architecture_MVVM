@@ -18,7 +18,7 @@ class NaverMoviePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         try {
             //네이버 영화 아이템의 첫번째 인덱스
-            Log.i("sjh", "params.key : ${params.key}")
+
             val startIndex = params.key ?: 1
             val data = service.searchMovies(query, display, startIndex)
 
