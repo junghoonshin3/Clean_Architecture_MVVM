@@ -6,6 +6,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.*
@@ -28,14 +29,38 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragme
     override fun init() {
         binding.vm = viewModel
         val pagingAdapter = MovieListAdapter(MovieListComparator)
+        val loadStateAdapter = MovieLoadStateAdapter {
+            //retry 시 들어갈 코드
+            pagingAdapter.retry()
+        }
         with(binding.rvMovieList) {
             setHasFixedSize(true)
             adapter = pagingAdapter.withLoadStateFooter(
-                MovieLoadStateAdapter {
-                    //retry 시 들어갈 코드
-                    pagingAdapter.retry()
-                }
+                loadStateAdapter
             )
+
+            viewLifecycleOwner.lifecycleScope.launch {
+
+                //리싸이클러뷰 어뎁터의 로드 상태값이 변경될때마다 LoadStateAdpater의 로드 상태값을 업데이트 해준다.
+                pagingAdapter.loadStateFlow
+                    // 네트워크로 새롭게 데이터를 불러오는 경우
+                    .distinctUntilChangedBy {
+                        it.refresh
+                    }
+                    .filter {
+                        (it.refresh is LoadState.Error || it.refresh is LoadState.NotLoading)
+                    }.collectLatest {
+                        loadStateAdapter.loadState = it.refresh
+                        // 네트워크로 데이터를 불러온 경우 항상 스크롤을 상단으로 고정
+                        if (it.refresh is LoadState.NotLoading) {
+                            scrollToPosition(0)
+                        } else if (it.refresh is LoadState.Error) {
+                            scrollToPosition(pagingAdapter.itemCount)
+                        }
+
+                    }
+            }
+
             // 로딩 시 그리드 레이아웃의 스펜카운터를 1로 변경
             (layoutManager as GridLayoutManager).spanSizeLookup =
                 object : GridLayoutManager.SpanSizeLookup() {

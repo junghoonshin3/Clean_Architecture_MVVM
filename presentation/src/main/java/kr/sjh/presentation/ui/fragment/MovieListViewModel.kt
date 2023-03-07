@@ -32,3 +32,4 @@ class MovieListViewModel @Inject constructor(private val getMoviesUseCase: GetMo
         }
     }
 }
+
