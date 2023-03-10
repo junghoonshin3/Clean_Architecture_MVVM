@@ -32,7 +32,7 @@
             android:id="@+id/mb_retry"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:text="재시작"
+            android:text="재시도"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

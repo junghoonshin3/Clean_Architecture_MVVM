@@ -16,7 +16,7 @@ object RemoteDataModule {
 
     @Provides
     fun provideRemoteDataSource(
-        service: NaverMovieService
+        service: NaverMovieService,
     ): MovieRemoteDataSource =
         MovieRemoteDataSourceImpl(service)
 }

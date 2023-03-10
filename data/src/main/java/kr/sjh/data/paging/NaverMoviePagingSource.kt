@@ -38,13 +38,14 @@ class NaverMoviePagingSource(
                         nextKey = nextKey
                     )
                 } else {
+                    Log.i("sjh","데이터가없어")
                     LoadResult.Error(
-                        Error(data.message())
+                        java.lang.Exception("데이터가 없음")
                     )
                 }
             } else {
                 LoadResult.Error(
-                    Error(data.message())
+                    java.lang.Exception(data.message())
                 )
             }
 

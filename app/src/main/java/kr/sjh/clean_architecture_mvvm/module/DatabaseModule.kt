@@ -8,7 +8,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kr.sjh.data.db.NaverMovieDB
 import kr.sjh.data.db.NaverMovieDao
-import kr.sjh.data.db.NaverMovieRemoteKeysDao
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -20,8 +19,6 @@ object DatabaseModule {
             .build()
 
     @Provides
-    fun provideMovieDao(movieDB: NaverMovieDB) : NaverMovieDao= movieDB.movieDao()
+    fun provideMovieDao(movieDB: NaverMovieDB) : NaverMovieDao= movieDB.movieSearchWordDao()
 
-    @Provides
-    fun provideMovieRemoteKeysDao(movieDB: NaverMovieDB) : NaverMovieRemoteKeysDao = movieDB.movieRemoteKeysDao()
 }

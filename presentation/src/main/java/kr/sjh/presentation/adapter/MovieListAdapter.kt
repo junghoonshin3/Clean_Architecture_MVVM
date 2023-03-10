@@ -15,6 +15,7 @@ class MovieListAdapter(diffCallback: DiffUtil.ItemCallback<Movie>) :
     private val LOADING_ITEM = 1
     private val MOVIE_ITEM = 2
 
+
     override fun getItemViewType(position: Int): Int {
         return if (position == itemCount) MOVIE_ITEM else LOADING_ITEM
     }

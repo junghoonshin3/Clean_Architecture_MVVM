@@ -3,14 +3,17 @@ package kr.sjh.data.repository.source.remote
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kr.sjh.data.api.NaverMovieService
+import kr.sjh.data.db.NaverMovieDB
+import kr.sjh.data.model.MovieSearchWordEntity
 import kr.sjh.data.paging.NaverMoviePagingSource
 import kr.sjh.domain.model.Movie
 import javax.inject.Inject
 
 interface MovieRemoteDataSource {
-    fun getMovies(
+    suspend fun getMovies(
         query: String,
         dispaly: Int,
         start: Int
@@ -22,7 +25,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
 ) :
     MovieRemoteDataSource {
 
-    override fun getMovies(
+    override suspend fun getMovies(
         query: String,
         dispaly: Int,
         start: Int

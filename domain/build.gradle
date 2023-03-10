@@ -45,4 +45,7 @@ dependencies {
     //hilt -dagger
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+
+    //Timber
+    implementation "com.jakewharton.timber:timber:4.7.1"
 }

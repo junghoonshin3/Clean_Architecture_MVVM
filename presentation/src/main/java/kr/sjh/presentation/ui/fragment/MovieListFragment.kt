@@ -2,22 +2,24 @@ package kr.sjh.presentation.ui.fragment
 
 import MovieLoadStateAdapter
 import android.util.Log
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kr.sjh.presentation.R
 import kr.sjh.presentation.adapter.MovieListAdapter
 import kr.sjh.presentation.adapter.MovieListComparator
+import kr.sjh.presentation.adapter.MovieSearchWordAdapter
+import kr.sjh.presentation.adapter.MovieSearchWordComparator
 import kr.sjh.presentation.core.BaseFragment
-import kr.sjh.presentation.core.BaseViewModel
 import kr.sjh.presentation.databinding.FragmentMovieListBinding
-import kr.sjh.presentation.viewmodel.MainViewModel
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragment_movie_list) {
@@ -40,7 +42,6 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragme
             )
 
             viewLifecycleOwner.lifecycleScope.launch {
-
                 //리싸이클러뷰 어뎁터의 로드 상태값이 변경될때마다 LoadStateAdpater의 로드 상태값을 업데이트 해준다.
                 pagingAdapter.loadStateFlow
                     // 네트워크로 새롭게 데이터를 불러오는 경우
@@ -48,20 +49,15 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragme
                         it.refresh
                     }
                     .filter {
+                        //에러가 나는 경우 그리고 로딩중이 아닌경우에만 결과데이터를 받는다
                         (it.refresh is LoadState.Error || it.refresh is LoadState.NotLoading)
                     }.collectLatest {
+                        binding.rvMovieSearchWord.scrollToPosition(0)
                         loadStateAdapter.loadState = it.refresh
-                        // 네트워크로 데이터를 불러온 경우 항상 스크롤을 상단으로 고정
-                        if (it.refresh is LoadState.NotLoading) {
-                            scrollToPosition(0)
-                        } else if (it.refresh is LoadState.Error) {
-                            scrollToPosition(pagingAdapter.itemCount)
-                        }
-
                     }
             }
 
-            // 로딩 시 그리드 레이아웃의 스펜카운터를 1로 변경
+            // 데이타 로딩 시 그리드 레이아웃의 스펜카운터를 1로 변경
             (layoutManager as GridLayoutManager).spanSizeLookup =
                 object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
@@ -69,6 +65,7 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragme
                     }
 
                 }
+
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.movieList.collectLatest {
                     it?.let {
@@ -76,11 +73,20 @@ class MovieListFragment : BaseFragment<FragmentMovieListBinding>(R.layout.fragme
                     }
                 }
             }
+
+
+        }
+
+        with(binding.rvMovieSearchWord) {
+            setHasFixedSize(true)
+            val searchAdapter = MovieSearchWordAdapter(MovieSearchWordComparator)
+            adapter = searchAdapter
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.searchMovie.debounce(1000).filter { it.isNotBlank() }
-                    .collectLatest {
-                        viewModel.getMovies(it, 10, 1)
+                viewModel.movieSearchWord.collectLatest {
+                    it?.let {
+                        searchAdapter.submitData(it)
                     }
+                }
             }
         }
 
